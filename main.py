@@ -1,5 +1,6 @@
 import itertools
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def is_automorphism(G, perm):
     n = G.number_of_nodes()
@@ -56,3 +57,32 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def run_examples():
+    graphs = {
+        "K3,3": nx.complete_bipartite_graph(3, 3),
+        "Cube Graph": nx.cubical_graph(),
+        "Petersen Graph": nx.petersen_graph(),
+    }
+
+    for name, G in graphs.items():
+        print("\n====================")
+        print(f"Graph: {name}")
+        print("====================")
+
+        autos = all_automorphisms(G)
+
+        print("Cubic:", all(d == 3 for _, d in G.degree()))
+        print("Automorphisms:", len(autos))
+        print("Vertex-transitive:", is_vertex_transitive(G, autos))
+        print("Edge-transitive:", is_edge_transitive(G, autos))
+
+
+if __name__ == "__main__":
+    run_examples()
+
+def draw_graph(G, title):
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray')
+    plt.title(title)
+    plt.show()
